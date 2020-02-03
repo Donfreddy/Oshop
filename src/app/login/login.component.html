@@ -1,0 +1,40 @@
+
+
+
+
+<div class="text-center">
+  <form class="form-signin">
+    <img class="mb-2" src="assets/user.png" alt="user" width="150" height="150">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <div class="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"> Remember me
+      </label>
+    </div>
+    
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <br>
+    <p>ou</p>
+    <div class="">
+      <button type="button" class="btn btn-lg btn-block btn-danger" (click)="login()">
+        Se connecter avec
+        <i class="fab fa-google-plus-g pl-2"></i>
+      </button>
+    </div>
+    <div class="mt-2">
+      <button type="button" class="btn btn-lg btn-block btn-primary">
+        Se connecter avec
+        <i class="fab fa-facebook-square pl-2"></i>
+      </button>
+      <button type="button" class="btn btn-lg btn-block btn-dark">
+        Se connecter avec
+        <i class="fab fa-github pl-2"></i>
+      </button>
+    </div>
+    <p class="mt-5 text-muted">&copy; 2020 O'shop.Inc</p>
+  </form>
+</div>

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { Product } from './models/product';
 import 'rxjs/add/operator/map';
-
+import { ShoppingCart } from './shopping-cart';
 
 @Injectable({
   providedIn: 'root'
@@ -18,11 +18,16 @@ export class ShoppingCardService {
     });
   }
 
-  private getCart(cartId: string) {
-    return this.db.object('/shopping-cart/' + cartId)
+  async getCart(): Promise<AngularFireObject<ShoppingCart>> {
+    let cartId = await this.getOrCreateCartId();
+    return this.db.object('/shopping-cart/' + cartId);
   }
 
-  private async getOrCreateCartId() {
+  private getItem(cartId: string, productId: string) {
+    return this.db.object('/shopping-cart/' + cartId + '/items/' + productId);
+  }
+
+  private async getOrCreateCartId(): Promise<string> {
     let cartId = localStorage.getItem('cartId');
     if (cartId) return cartId;
 
@@ -32,12 +37,24 @@ export class ShoppingCardService {
   }
 
   async addToCart(product: Product) {
-    let cartId = await this.getOrCreateCartId();
+   this.updateItemQty(product, 1);
+  }
 
-  /*   let item$ = this.db.object('/shopping-cart/' + cartId + '/items/' + product.key).valueChanges()
+  async removeFromCart(product: Product) {
+    this.updateItemQty(product, -1);
+  }
+
+  async updateItemQty(product: Product, change: number) {
+    let cartId = await this.getOrCreateCartId();
+    let item$$ = this.getItem(cartId, product.key);
+    let item$: Observable<any> = this.getItem(cartId, product.key).valueChanges();
+    
     item$.take(1).subscribe(item => {
-      if (item.$exists()) item$.update({ quantity: item.quantity + 1 })
-      else item$.set({ product: product, quantity: 1 });
-    }); */
+      if (item) {
+        item$$.update({ quantity: item.quantity + change });
+      } else {
+          item$$.set({ product: product, quantity: change });
+        }
+      });
   }
 }
